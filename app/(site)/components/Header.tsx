@@ -26,7 +26,6 @@ const Header = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownTimeout = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
-  const pathname = usePathname();
 
   // useEffect(() => {
   //   const handleAuthStateChange = () => {
@@ -263,7 +262,7 @@ const Header = () => {
                       onClick={() => {
                         localStorage.removeItem('token');
                         localStorage.removeItem('user');
-                        setUser(null);
+                        // setUser(null);
                         router.push('/');
                       }}
                     >
