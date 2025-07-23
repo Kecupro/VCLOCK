@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useAuth } from "../context/AuthContext";
 import AuthModal from "./AuthModal";
@@ -15,7 +15,7 @@ interface SearchSuggestion {
 const Height = 40; 
 
 const Header = () => {
-  const { user, setUser } = useAuth();
+  const { user } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
