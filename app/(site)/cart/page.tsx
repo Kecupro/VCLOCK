@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 const mockCartData: ICart[] = [
   {
     _id: "demo_1",
+    product_id: "demo_1",
     name: "Rolex Submariner Date 126610LN - Đồng hồ lặn cao cấp",
     price: 85000000,
     sale_price: 72000000,
@@ -16,6 +17,7 @@ const mockCartData: ICart[] = [
   },
   {
     _id: "demo_2",
+    product_id: "demo_2",
     name: "Omega Seamaster Planet Ocean 600M Co-Axial",
     price: 65000000,
     sale_price: 0,
@@ -24,6 +26,7 @@ const mockCartData: ICart[] = [
   },
   {
     _id: "demo_3",
+    product_id: "demo_3",
     name: "Cartier Tank Solo Automatic - Đồng hồ thanh lịch",
     price: 45000000,
     sale_price: 36000000,
