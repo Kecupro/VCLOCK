@@ -69,7 +69,7 @@ export default function ShopPage() {
     // Dữ liệu giả cho brands
     const mockBrands: IBrand[] = [
       {
-        _id: 1,
+        _id: "1",
         name: "Rolex",
         image: "luxury-shopping-1",
         alt: "Rolex",
@@ -80,7 +80,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 2, 
+        _id: "2", 
         name: "Omega",
         image: "luxury-shopping-watch1-1",
         alt: "Omega",
@@ -91,7 +91,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 3,
+        _id: "3",
         name: "Cartier",
         image: "cartier-luxshopping4",
         alt: "Cartier", 
@@ -102,7 +102,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 4,
+        _id: "4",
         name: "Patek Philippe",
         image: "patek-philippe-logo1-1",
         alt: "Patek Philippe",
@@ -113,7 +113,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 5,
+        _id: "5",
         name: "Audemars Piguet",
         image: "luxury-shopping3-1",
         alt: "Audemars Piguet",
@@ -124,7 +124,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 6,
+        _id: "6",
         name: "Breguet",
         image: "breguet-luxshopping-1",
         alt: "Breguet",
@@ -135,7 +135,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 7,
+        _id: "7",
         name: "Longines",
         image: "logo-longines-full",
         alt: "Longines",
@@ -146,7 +146,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 8,
+        _id: "8",
         name: "IWC",
         image: "luxury-shopping8-1",
         alt: "IWC",
@@ -157,7 +157,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 9,
+        _id: "9",
         name: "Jaeger-LeCoultre",
         image: "jaeger-lecoultre-luxshopping1",
         alt: "Jaeger-LeCoultre",
@@ -168,7 +168,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 10,
+        _id: "10",
         name: "Vacheron Constantin",
         image: "vacheron-constantin-luxshopping2-0",
         alt: "Vacheron Constantin",
@@ -179,7 +179,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 11,
+        _id: "11",
         name: "Hublot",
         image: "hublot-luxshopping2-1",
         alt: "Hublot",
@@ -190,7 +190,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 12,
+        _id: "12",
         name: "Tag Heuer",
         image: "tag-heuer-9",
         alt: "Tag Heuer",
@@ -201,7 +201,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 13,
+        _id: "13",
         name: "Tissot",
         image: "luxshopping41-1",
         alt: "Tissot",
@@ -212,7 +212,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 14,
+        _id: "14",
         name: "Seiko",
         image: "luxshopping46-1",
         alt: "Seiko",
@@ -223,7 +223,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 15,
+        _id: "15",
         name: "Citizen",
         image: "luxshopping45-1",
         alt: "Citizen",
@@ -234,7 +234,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 16,
+        _id: "16",
         name: "Chanel",
         image: "chanel-luxshoppping1-1",
         alt: "Chanel",
@@ -245,7 +245,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 17,
+        _id: "17",
         name: "Dior",
         image: "dior-luxshopping1-1",
         alt: "Dior",
@@ -256,7 +256,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 18,
+        _id: "18",
         name: "Chopard",
         image: "chopard-luxshopping-20231",
         alt: "Chopard",
@@ -267,7 +267,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 19,
+        _id: "19",
         name: "Piaget",
         image: "piaget-luxury-shopping1-1",
         alt: "Piaget",
@@ -278,7 +278,7 @@ export default function ShopPage() {
         updated_at: "2024-01-01T00:00:00Z"
       },
       {
-        _id: 20,
+        _id: "20",
         name: "Panerai",
         image: "panerai-luxshopping2-1",
         alt: "Panerai",
@@ -1211,7 +1211,7 @@ export default function ShopPage() {
     // Filter by category
     if (selectedCategory && selectedCategory !== 'Tất cả') {
       filteredProducts = filteredProducts.filter(p => 
-        p.categories.some(cat => cat.name === selectedCategory)
+        p.categories?.some((c) => c.name === selectedCategory)
       );
     }
 
