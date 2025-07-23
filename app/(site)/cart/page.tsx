@@ -5,18 +5,41 @@ import { ICart } from "../cautrucdata";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
+const mockCartData: ICart[] = [
+  {
+    _id: "demo_1",
+    name: "Rolex Submariner Date 126610LN - Đồng hồ lặn cao cấp",
+    price: 85000000,
+    sale_price: 72000000,
+    main_image: { image: "breguet-classique-quantieme-perpetuel-7327br-11-9vu-39mm.jpg.webp", alt: "Rolex Demo" },
+    so_luong: 1,
+  },
+  {
+    _id: "demo_2",
+    name: "Omega Seamaster Planet Ocean 600M Co-Axial",
+    price: 65000000,
+    sale_price: 0,
+    main_image: { image: "bulova-accu-swiss-tellaro-automatic-watch-43mm4.jpg.webp", alt: "Omega Demo" },
+    so_luong: 2,
+  },
+  {
+    _id: "demo_3",
+    name: "Cartier Tank Solo Automatic - Đồng hồ thanh lịch",
+    price: 45000000,
+    sale_price: 36000000,
+    main_image: { image: "baume--mercier-hampton-10709-blue-watch-35-x-22mm1.png.webp", alt: "Cartier Demo" },
+    so_luong: 1,
+  },
+];
+
 export default function Cart() {
   const [cart, setCart] = useState<ICart[]>([]);
   const [total, setTotal] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
-    if (storedCart) {
-      const parsedCart = JSON.parse(storedCart);
-      setCart(parsedCart);
-      calculateTotal(parsedCart);
-    }
+    setCart(mockCartData);
+    calculateTotal(mockCartData);
   }, []);
 
   const calculateTotal = (cartItems: ICart[]) => {
@@ -27,21 +50,21 @@ export default function Cart() {
     setTotal(sum);
   };
 
-  const updateQuantity = (id: string, newQuantity: number) => {
+    const updateQuantity = (id: string, newQuantity: number) => {
     if (newQuantity < 1) return;
 
     const updatedCart = cart.map((item) =>
       item._id === id ? { ...item, so_luong: newQuantity } : item
     );
     setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    // localStorage.setItem("cart", JSON.stringify(updatedCart)); // Demo mode: disabled
     calculateTotal(updatedCart);
   };
 
-  const removeItem = (id: string) => {
+    const removeItem = (id: string) => {
     const updatedCart = cart.filter((item) => item._id !== id);
     setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    // localStorage.setItem("cart", JSON.stringify(updatedCart)); // Demo mode: disabled
     calculateTotal(updatedCart);
     toast.success("Đã xóa sản phẩm khỏi giỏ hàng!");
   };

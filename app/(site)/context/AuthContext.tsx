@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { IUser } from "../cautrucdata";
+import { IUser, IAddress } from "../cautrucdata";
 
 interface AuthContextType {
   user: IUser | null;
@@ -12,63 +12,54 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// --- DEMO MODE --- //
+const mockUser: IUser = {
+  _id: "user_demo_123",
+  username: "demouser",
+  email: "demo.user@example.com",
+  account_status: 1,
+  role: 0,
+  fullname: "Người Dùng Demo",
+  avatar: "/path/to/demo/avatar.png", // You can use a real path if you have a placeholder image
+  addresses: [
+    {
+      _id: "addr_demo_1",
+      user_id: "user_demo_123",
+      receiver_name: "Người Dùng Demo",
+      phone: 123456789,
+      address: "123 Đường Demo, Phường ABC, Quận XYZ, Thành phố HCM",
+      updated_at: new Date(),
+      created_at: new Date(),
+    },
+    {
+      _id: "addr_demo_2",
+      user_id: "user_demo_123",
+      receiver_name: "Văn Phòng Demo",
+      phone: 987654321,
+      address: "456 Tòa nhà Demo, Đường DEF, Quận UVW, Thành phố Hà Nội",
+      updated_at: new Date(),
+      created_at: new Date(),
+    },
+  ],
+  created_at: new Date(),
+  updated_at: new Date(),
+};
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<IUser | null>(null);
-  const router = useRouter();
-  
-  // const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  
-  // Hàm lấy user từ API (dùng khi đăng nhập Google hoặc refresh avatar)
-  const refreshUser = async () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const res = await fetch(`/user/profile`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const userData = await res.json();
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
-      } else {
-        setUser(null);
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-      }
-    } else {
-      setUser(null);
-    }
-  };
+  const [user, setUser] = useState<IUser | null>(mockUser);
 
-  // Đọc user từ localStorage khi load
-  useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) setUser(JSON.parse(userData));
-  }, []);
-
-  // Lắng nghe sự kiện đăng nhập/đăng xuất từ tab khác
-  useEffect(() => {
-    const handleStorage = (event: StorageEvent) => {
-      if (event.key === "user" || event.key === "token") {
-        const token = localStorage.getItem("token");
-        const userData = localStorage.getItem("user");
-        if (token && userData) {
-          setUser(JSON.parse(userData));
-        } else {
-          setUser(null);
-        }
-      }
-    };
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
-
-  // Đăng xuất
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-    router.push("/");
+    console.log("Logout disabled in demo mode.");
+    // In demo mode, logout does nothing to keep the user logged in.
   };
+
+  const refreshUser = async () => {
+    console.log("User refresh disabled in demo mode.");
+    // No need to refresh user data in demo mode
+    return Promise.resolve();
+  };
+
+  // All useEffects related to localStorage are disabled for demo mode.
 
   return (
     <AuthContext.Provider value={{ user, setUser, logout, refreshUser }}>
