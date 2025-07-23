@@ -1,23 +1,10 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { IUser } from "../cautrucdata";
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import { IAddress } from "../cautrucdata";
-import { IProduct } from "../cautrucdata";
-import OrderCard from "./OrderCard ";
-import VoucherCard from "../components/VoucherCard";
-
-interface WishlistItem {
-  _id: string;
-  product_id: string;
-  user_id: string;
-  created_at: string;
-  updated_at: string;
-  product: IProduct;
-}
 
 interface TabItem {
-  key: "info" | "orders" | "favorites" | "addresses" | "voucher";
+  key: "info" | "addresses" | "favorites" | "voucher";
   label: string;
   icon: string;
 }
@@ -30,304 +17,20 @@ const tabItems: TabItem[] = [
 ];
 
 export default function AccountPage() {
-  const router = useRouter();
-  const [user, setUser] = useState<IUser | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAddingAddress, setIsAddingAddress] = useState(false);
-  const [isEditingAddress, setIsEditingAddress] = useState(false);
-  const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
-  const [newAddress, setNewAddress] = useState({
-    receiver_name: '',
-    phone: '',
-    address: ''
-  });
-  const [tab, setTab] = useState<"info" | "orders" | "favorites" | "addresses" | "voucher">("info");
-  
-  const [avatar, setAvatar] = useState("/avatar-default.jpg"); 
-  const [selectedAvatarFile, setSelectedAvatarFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { user } = useAuth();
+  const [tab, setTab] = useState<"info" | "addresses" | "favorites" | "voucher">("info");
 
-  const [currentEmail, setCurrentEmail] = useState('');
-
-  // Address management states
-  const [addresses, setAddresses] = useState<IAddress[]>([]);
-  const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
-  const [isLoadingWishlist, setIsLoadingWishlist] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const fetchUser = async () => {
-      if (token) {
-        try {
-          const response = await fetch('/user/profile', {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
-          if (response.ok) {
-            const data: IUser = await response.json();
-            setUser(data);
-            setCurrentEmail(data.email || '');
-            if (data.avatar) {
-              const newAvatar = data.avatar.startsWith('http') 
-                ? data.avatar 
-                : `/${data.avatar}`;
-              setAvatar(newAvatar);
-            }
-          } else {
-            console.error("Failed to fetch user data:", response.statusText);
-            alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
-            router.push("/");
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
-      }
-      setIsLoading(false);
-    };
-
-    if (!token) {
-      router.push("/");
-      setIsLoading(false);
-    } else {
-      setIsAuthenticated(true);
-      fetchUser();
-    }
-  }, [router]);
-
-  // Fetch addresses when tab changes to addresses
-  useEffect(() => {
-    if (tab === 'addresses') {
-      fetchAddresses();
-    }
-  }, [tab]);
-
-  const fetchAddresses = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      const response = await fetch('/user/addresses', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setAddresses(data);
-      }
-    } catch (error) {
-      console.error("Error fetching addresses:", error);
-    }
+  const handleDisabledFeature = () => {
+    alert("Tính năng này đã bị vô hiệu hóa trong chế độ demo.");
   };
 
-  // Fetch wishlist items when tab changes to favorites
-  useEffect(() => {
-    if (tab === 'favorites') {
-      fetchWishlistItems();
-    }
-  }, [tab]);
-
-  const fetchWishlistItems = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      setIsLoadingWishlist(true);
-      const response = await fetch('/user/wishlist', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Wishlist data:', data); // Debug log
-        setWishlistItems(data);
-      }
-    } catch (error) {
-      console.error("Error fetching wishlist:", error);
-    } finally {
-      setIsLoadingWishlist(false);
-    }
-  };
-
-  const handleLogout = () => {
-    if (window.confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    localStorage.removeItem('cart');
-    router.push("/");
-    }
-  };
-
-  const handleAvatarClick = () => fileInputRef.current?.click();
-
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSelectedAvatarFile(file);
-      const previewUrl = URL.createObjectURL(file);
-      setAvatar(previewUrl);
-    }
-  };
-
-  const handleAvatarSave = async () => {
-    const token = localStorage.getItem("token");
-    if (!token || !selectedAvatarFile) return;
-    const formData = new FormData();
-      formData.append('avatar', selectedAvatarFile);
-    try {
-      setIsLoading(true);
-      const response = await fetch('/user/profile/update', {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
-      const result = await response.json();
-      if (response.ok) {
-        setUser(result.user);
-        setCurrentEmail(result.user.email || '');
-        if (result.user.avatar) {
-          const updatedAvatar = result.user.avatar.startsWith('http')
-            ? result.user.avatar
-            : `/${result.user.avatar}?t=${new Date().getTime()}`;
-          setAvatar(updatedAvatar);
-        }
-        setSelectedAvatarFile(null);
-      }
-    } catch (error) {
-      console.error("Profile update error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleAddAddress = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      const response = await fetch('/user/addresses', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newAddress)
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setAddresses([...addresses, data]);
-        setNewAddress({ receiver_name: '', phone: '', address: '' });
-        setIsAddingAddress(false);
-      }
-    } catch (error) {
-      console.error("Error adding address:", error);
-    }
-  };
-
-  const handleDeleteAddress = async (addressId: string) => {
-    if (!window.confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) return;
-
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      const response = await fetch(`/user/addresses/${addressId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        setAddresses(addresses.filter(addr => addr._id !== addressId));
-      }
-    } catch (error) {
-      console.error("Error deleting address:", error);
-    }
-  };
-
-  const handleEditAddress = (address: IAddress) => {
-    setEditingAddressId(address._id);
-    setNewAddress({
-      receiver_name: address.receiver_name,
-      phone: address.phone.toString(),
-      address: address.address
-    });
-    setIsEditingAddress(true);
-  };
-
-  const handleUpdateAddress = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
-    if (!token || !editingAddressId) return;
-
-    try {
-      const response = await fetch(`/user/addresses/${editingAddressId}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          receiver_name: newAddress.receiver_name,
-          phone: newAddress.phone,
-          address: newAddress.address
-        })
-      });
-
-      if (response.ok) {
-        const updatedAddress = await response.json();
-        setAddresses(addresses.map(addr => 
-          addr._id === editingAddressId ? updatedAddress : addr
-        ));
-        setNewAddress({ receiver_name: '', phone: '', address: '' });
-        setIsEditingAddress(false);
-        setEditingAddressId(null);
-      }
-    } catch (error) {
-      console.error("Error updating address:", error);
-    }
-  };
-
-  const handleRemoveFromWishlist = async (productId: string) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích?")) return;
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      const response = await fetch(`/user/wishlist/${productId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        setWishlistItems(wishlistItems.filter(item => item.product_id !== productId));
-        alert('Đã xóa sản phẩm khỏi danh sách yêu thích!');
-      }
-    } catch (error) {
-      console.error("Error removing from wishlist:", error);
-      alert('Có lỗi xảy ra khi xóa sản phẩm khỏi danh sách yêu thích.');
-    }
-  };
-
-  if (isLoading) {
+  if (!user) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600"></div>
+        <p>Đang chuyển hướng...</p>
       </div>
     );
   }
-
-  if (!isAuthenticated) return null;
 
   return (
     <main className="max-w-6xl mx-auto py-10 px-4 pt-40 font-sans bg-gray-50 min-h-screen">
@@ -338,8 +41,8 @@ export default function AccountPage() {
             <div className="flex flex-col items-center mb-8">
               <div className="relative w-24 h-24 mb-4 group">
                 <img
-                  src={avatar}
-                  alt={user?.fullname || 'User Avatar'}
+                  src={user.avatar || '/avatar-default.png'}
+                  alt={user.fullname || 'User Avatar'}
                   className="w-24 h-24 rounded-full object-cover border border-gray-200"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = '/avatar-default.png';
@@ -347,21 +50,14 @@ export default function AccountPage() {
                 />
                 <button
                   type="button"
-                  onClick={handleAvatarClick}
-                  className="absolute bottom-0 right-0 bg-white rounded-full p-2 border border-gray-200 hover:bg-gray-50 transition-all duration-300"
+                  onClick={handleDisabledFeature}
+                  className="absolute bottom-0 right-0 bg-white rounded-full p-2 border border-gray-200 hover:bg-gray-50 transition-all duration-300 cursor-not-allowed"
                 >
                   <i className="fa-solid fa-camera text-gray-600"></i>
                 </button>
-                <input
-                  type="file"
-                  accept="image/*"
-                  ref={fileInputRef}
-                  className="hidden"
-                  onChange={handleAvatarChange}
-                />
               </div>
-              <h2 className="text-xl font-bold text-gray-800">{user?.fullname}</h2>
-              <p className="text-gray-600">{user?.email}</p>
+              <h2 className="text-xl font-bold text-gray-800">{user.fullname}</h2>
+              <p className="text-gray-600">{user.email}</p>
             </div>
 
             <nav className="space-y-2">
@@ -380,8 +76,8 @@ export default function AccountPage() {
                 </button>
               ))}
               <button
-                className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-100 transition-all duration-200"
-                onClick={handleLogout}
+                className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-100 transition-all duration-200 cursor-not-allowed"
+                onClick={handleDisabledFeature}
               >
                 <i className="fa-solid fa-right-from-bracket w-5 h-5"></i>
                 <span className="font-medium">Đăng xuất</span>
@@ -392,12 +88,63 @@ export default function AccountPage() {
           {/* Main Content */}
           <section className="flex-1 p-8 bg-white">
             {tab === "info" && (
-              <div className="max-w-2xl mx-auto relative">
-                <h2 className="text-xl font-bold text-gray-800 mb-6">Tài khoản</h2>
-                {selectedAvatarFile && (
-                  <button
-                    type="button"
-                    className="absolute top-0 right-0 bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 flex items-center space-x-2 z-10"
+              <div className="max-w-2xl mx-auto">
+                <h2 className="text-xl font-bold text-gray-800 mb-6">Thông tin tài khoản</h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500">Họ và tên</label>
+                    <input type="text" readOnly value={user.fullname || ''} className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm cursor-not-allowed" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500">Email</label>
+                    <input type="email" readOnly value={user.email || ''} className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm cursor-not-allowed" />
+                  </div>
+                  <button onClick={handleDisabledFeature} className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 cursor-not-allowed">Cập nhật</button>
+                </div>
+              </div>
+            )}
+
+            {tab === "addresses" && (
+              <div>
+                <h2 className="text-xl font-bold text-gray-800 mb-6">Địa chỉ của tôi</h2>
+                <div className="space-y-4">
+                  {user.addresses && user.addresses.map((addr: IAddress) => (
+                    <div key={addr._id} className="p-4 border rounded-lg flex justify-between items-center">
+                      <div>
+                        <p className="font-semibold">{addr.receiver_name}</p>
+                        <p>{addr.phone}</p>
+                        <p>{addr.address}</p>
+                      </div>
+                      <div className="space-x-2">
+                        <button onClick={handleDisabledFeature} className="text-gray-400 cursor-not-allowed"><i className="fa-solid fa-pen"></i></button>
+                        <button onClick={handleDisabledFeature} className="text-gray-400 cursor-not-allowed"><i className="fa-solid fa-trash"></i></button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={handleDisabledFeature} className="mt-6 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 cursor-not-allowed">Thêm địa chỉ mới</button>
+              </div>
+            )}
+
+            {tab === "favorites" && (
+                <div>
+                    <h2 className="text-xl font-bold text-gray-800 mb-6">Sản phẩm yêu thích</h2>
+                    <p className="text-gray-500">Không có sản phẩm yêu thích nào trong chế độ demo.</p>
+                </div>
+            )}
+
+            {tab === "voucher" && (
+                <div>
+                    <h2 className="text-xl font-bold text-gray-800 mb-6">Voucher</h2>
+                    <p className="text-gray-500">Không có voucher nào trong chế độ demo.</p>
+                </div>
+            )}
+          </section>
+        </div>
+      </div>
+    </main>
+  );
+}
                     onClick={handleAvatarSave}
                     disabled={isLoading}
                   >

@@ -19,7 +19,7 @@ const mockUser: IUser = {
   account_status: 1,
   role: 0,
   fullname: "Người Dùng Demo",
-  avatar: "/path/to/demo/avatar.png", // You can use a real path if you have a placeholder image
+  avatar: null,
   addresses: [
     {
       _id: "addr_demo_1",
