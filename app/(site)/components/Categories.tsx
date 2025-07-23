@@ -1,0 +1,99 @@
+"use client";
+import Link from "next/link";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import { useRef } from "react";
+import { IBrand } from "../cautrucdata";
+
+const mockBrands: IBrand[] = [
+  { _id: 'b1', name: 'Brand A', productCount: 2, image: 'luxury-shoping1-1.png.webp' },
+  { _id: 'b2', name: 'Brand B', productCount: 1, image: 'luxshopping77-1.png.webp' },
+  { _id: 'b3', name: 'Brand C', productCount: 1, image: 'vesus-luxury-shopping1-1.png.webp' },
+  { _id: 'b4', name: 'Brand D', productCount: 1, image: 'luxshoppingvn2-1.png.webp' },
+  { _id: 'b5', name: 'Brand E', productCount: 3, image: 'luxshopping121-1.png.webp' },
+  { _id: 'b6', name: 'Brand F', productCount: 2, image: 'luxshopping106-1.png.webp' },
+  { _id: 'b7', name: 'Brand G', productCount: 4, image: 'luxshopping117-1.png.webp' },
+  { _id: 'b8', name: 'Brand H', productCount: 2, image: 'luxshopping68-1.png.webp' }
+];
+
+export default function Categories() {
+	const brands = mockBrands;
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	// Intersection Observer for staggered animations
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						const items = entry.target.querySelectorAll('.stagger-item');
+						items.forEach((item, index) => {
+							setTimeout(() => {
+								item.classList.add('animate-in');
+							}, index * 100);
+						});
+					}
+				});
+			},
+			{ threshold: 0.2 }
+		);
+
+		if (containerRef.current) {
+			observer.observe(containerRef.current);
+		}
+
+		return () => observer.disconnect();
+	}, []);
+
+	return (
+		<div className="w-full py-8" ref={containerRef}>
+			<h3 className="text-center font-bold text-2xl mb-3 animate-section">
+				THƯƠNG HIỆU SẢN PHẨM
+			</h3>
+			<div className="mx-auto mb-8 w-30 h-1 bg-red-700 rounded animate-section"></div>
+			<div className="max-w-6xl mx-auto">
+				<Swiper
+					modules={[Navigation, Autoplay]}
+					spaceBetween={24}
+					slidesPerView={2}
+					navigation
+					autoplay={{ delay: 2500, disableOnInteraction: false }}
+					breakpoints={{
+						768: { slidesPerView: 4 },
+						480: { slidesPerView: 3 },
+					}}
+					loop
+				>
+					{brands.map((cat, idx) => (
+						<SwiperSlide key={idx}>
+							<div className="w-full h-full p-2 stagger-item animate-stagger">
+								<Link
+									href={'/'}
+									className="flex flex-col items-center text-center bg-white rounded shadow hover:shadow-lg transition-all duration-500 group w-full h-full hover-lift "
+								>
+									<div className="overflow-hidden w-full h-full">
+										<img
+											src={`/upload/brand/${cat.image}`}
+											alt={cat.name}
+											className="w-full h-full object-contain mb-3 transition-all duration-700 group-hover:scale-110 group-hover:-translate-y-2"
+										/>
+									</div>
+									<div className="w-full px-2 py-2 transition-all duration-500 group-hover:bg-gray-900 group-hover:text-white group-hover:-translate-y-2">
+										<span className="block font-semibold text-base text-gray-800 group-hover:text-white transition-colors duration-300">
+											{cat.name}
+										</span>
+										<span className="block text-[10px] text-gray-500 group-hover:text-white transition-colors duration-300">
+											{cat.productCount} SẢN PHẨM
+										</span>
+									</div>
+								</Link>
+							</div>
+						</SwiperSlide>
+					))}
+				</Swiper>
+			</div>
+		</div>
+	);
+}
