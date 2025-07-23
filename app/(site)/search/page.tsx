@@ -43,18 +43,13 @@ const SearchPage = () => {
   const performSearch = async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({
-        q: query || '',
-        ...filters
-      });
-      
       // Mock search response
       const mockResponse = {
         products: [
-          { _id: '1', name: 'Đồng hồ demo 1', price: 1000000, sale_price: 900000, main_image: { image: 'breguet-classique-quantieme-perpetuel-7327bb-11-9vu-39mm.jpg.webp', alt: 'sp1' }, brand: { _id: 'b1', name: 'Brand A' }, quantity: 10, views: 100 },
-          { _id: '2', name: 'Đồng hồ demo 2', price: 2000000, sale_price: 0, main_image: { image: 'bulova-accu-swiss-tellaro-automatic-watch-43mm4.jpg.webp', alt: 'sp2' }, brand: { _id: 'b2', name: 'Brand B' }, quantity: 5, views: 50 },
-          { _id: '3', name: 'Đồng hồ demo 3', price: 1500000, sale_price: 1200000, main_image: { image: 'bulova-murren-mechanical-hand-wind-automatic-watch-40mm1.jpg.webp', alt: 'sp3' }, brand: { _id: 'b3', name: 'Brand C' }, quantity: 8, views: 80 },
-          { _id: '4', name: 'Đồng hồ demo 4', price: 2500000, sale_price: 0, main_image: { image: 'breguet-tradition-dame-7038bb-1t-9v6-d00d-watch-37mm.jpg_980_980.webp', alt: 'sp4' }, brand: { _id: 'b4', name: 'Brand D' }, quantity: 3, views: 30 }
+          { _id: '1', name: 'Đồng hồ demo 1', price: 1000000, sale_price: 900000, main_image: { image: 'breguet-classique-quantieme-perpetuel-7327bb-11-9vu-39mm.jpg.webp', alt: 'sp1' }, brand: { name: 'Brand A' }, quantity: 10, views: 100 },
+          { _id: '2', name: 'Đồng hồ demo 2', price: 2000000, sale_price: 0, main_image: { image: 'bulova-accu-swiss-tellaro-automatic-watch-43mm4.jpg.webp', alt: 'sp2' }, brand: { name: 'Brand B' }, quantity: 5, views: 50 },
+          { _id: '3', name: 'Đồng hồ demo 3', price: 1500000, sale_price: 1200000, main_image: { image: 'bulova-murren-mechanical-hand-wind-automatic-watch-40mm1.jpg.webp', alt: 'sp3' }, brand: { name: 'Brand C' }, quantity: 8, views: 80 },
+          { _id: '4', name: 'Đồng hồ demo 4', price: 2500000, sale_price: 0, main_image: { image: 'breguet-tradition-dame-7038bb-1t-9v6-d00d-watch-37mm.jpg_980_980.webp', alt: 'sp4' }, brand: { name: 'Brand D' }, quantity: 3, views: 30 }
         ]
       };
       console.log('API search response:', mockResponse);
@@ -72,10 +67,10 @@ const SearchPage = () => {
     if (!loading && products.length === 0) {
       // Mock top-rated products
       setSuggestedProducts([
-        { _id: '1', name: 'Đồng hồ nổi bật 1', price: 1000000, sale_price: 900000, main_image: { image: 'bulova-accu-swiss-a-15-mechanical-watch-40mm1.jpg_980_980.webp', alt: 'sp1' }, brand: { _id: 'b1', name: 'Brand A' }, quantity: 10, views: 100 },
-        { _id: '2', name: 'Đồng hồ nổi bật 2', price: 2000000, sale_price: 0, main_image: { image: 'bulova-accu-swiss-tellaro-automatic-watch-43mm4.jpg.webp', alt: 'sp2' }, brand: { _id: 'b2', name: 'Brand B' }, quantity: 5, views: 50 },
-        { _id: '3', name: 'Đồng hồ nổi bật 3', price: 1500000, sale_price: 1200000, main_image: { image: 'bulova-murren-mechanical-hand-wind-automatic-watch-40mm1.jpg.webp', alt: 'sp3' }, brand: { _id: 'b3', name: 'Brand C' }, quantity: 8, views: 80 },
-        { _id: '4', name: 'Đồng hồ nổi bật 4', price: 2500000, sale_price: 0, main_image: { image: 'breguet-tradition-dame-7038bb-1t-9v6-d00d-watch-37mm.jpg_980_980.webp', alt: 'sp4' }, brand: { _id: 'b4', name: 'Brand D' }, quantity: 3, views: 30 }
+        { _id: '1', name: 'Đồng hồ nổi bật 1', price: 1000000, sale_price: 900000, main_image: { image: 'bulova-accu-swiss-a-15-mechanical-watch-40mm1.jpg_980_980.webp', alt: 'sp1' }, brand: { name: 'Brand A' }, quantity: 10, views: 100 },
+        { _id: '2', name: 'Đồng hồ nổi bật 2', price: 2000000, sale_price: 0, main_image: { image: 'bulova-accu-swiss-tellaro-automatic-watch-43mm4.jpg.webp', alt: 'sp2' }, brand: { name: 'Brand B' }, quantity: 5, views: 50 },
+        { _id: '3', name: 'Đồng hồ nổi bật 3', price: 1500000, sale_price: 1200000, main_image: { image: 'bulova-murren-mechanical-hand-wind-automatic-watch-40mm1.jpg.webp', alt: 'sp3' }, brand: { name: 'Brand C' }, quantity: 8, views: 80 },
+        { _id: '4', name: 'Đồng hồ nổi bật 4', price: 2500000, sale_price: 0, main_image: { image: 'breguet-tradition-dame-7038bb-1t-9v6-d00d-watch-37mm.jpg_980_980.webp', alt: 'sp4' }, brand: { name: 'Brand D' }, quantity: 3, views: 30 }
       ]);
     } else {
       setSuggestedProducts([]);

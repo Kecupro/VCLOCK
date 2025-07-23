@@ -10,17 +10,11 @@ import AddToCart from "./AddToCart";
 import WishlistButton from "./WishlistButton";
 
 
-interface WishlistItem {
-    _id: string;
-    product_id: string;
-    user_id: string;
-    created_at: string;
-    updated_at: string;
-}
+
 
 export default function ProductSale() {
     const [products, setProducts] = useState<IProduct[]>([]);
-    const [wishlistStatus, setWishlistStatus] = useState<{[key: string]: boolean}>({});
+    const [wishlistStatus] = useState<{[key: string]: boolean}>({});
 
 
     useEffect(() => {

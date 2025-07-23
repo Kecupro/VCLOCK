@@ -1,30 +1,29 @@
 export interface IProduct {
     _id: string;
-    brand: {name:string};
+    brand: { name: string };
     name: string;
-    description: string;
+    description?: string;
     price: number;
     sale_price: number;
-    status: number
-    // status: number,default: 0;
+    status?: number;
     quantity: number;
     views: number;
-    sex: string;
-    case_diameter: number;
-    style: string;
-    features: string;
-    water_resistance: string;
-    thickness: number;
-    color: string;
-    machine_type: string;
-    strap_material: string;
-    case_material: string;
-    sold: number;
-    categories: { name: string }[];
+    sex?: string;
+    case_diameter?: number;
+    style?: string;
+    features?: string;
+    water_resistance?: string;
+    thickness?: number;
+    color?: string;
+    machine_type?: string;
+    strap_material?: string;
+    case_material?: string;
+    sold?: number;
+    categories?: { name: string }[];
     main_image?: { image: string; alt: string };
-    images: IHinh[];
-    created_at: string;
-    updated_at: string;
+    images?: IHinh[];
+    created_at?: string;
+    updated_at?: string;
 }
 
 export interface IHinh {
@@ -35,15 +34,15 @@ export interface IHinh {
 }
 
 export interface IBrand {
-    _id: number;
+    _id: string;
     name: string;
-    image: string;
-    alt: string;
-    description: string;
-    brand_status: number;
-    productCount: number;
-    created_at: string;
-    updated_at: string;
+    image?: string;
+    alt?: string;
+    description?: string;
+    brand_status?: number;
+    productCount?: number;
+    created_at?: string;
+    updated_at?: string;
 }
 
 export interface ICart {

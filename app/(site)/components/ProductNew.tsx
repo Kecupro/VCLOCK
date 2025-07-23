@@ -4,32 +4,26 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { IProduct } from "../cautrucdata";
 import WishlistButton from "./WishlistButton";
 import AddToCart from "./AddToCart";
 
 
-interface WishlistItem {
-    _id: string;
-    product_id: string;
-    user_id: string;
-    created_at: string;
-    updated_at: string;
-}
+
 
 const mockProducts: IProduct[] = [
-  { _id: '1', name: 'Đồng hồ demo 1', price: 1000000, sale_price: 900000, main_image: { image: 'breguet-classique-quantieme-perpetuel-7327bb-11-9vu-39mm.jpg.webp', alt: 'sp1' }, brand: { _id: 'b1', name: 'Brand A' }, quantity: 10, views: 100 },
-  { _id: '2', name: 'Đồng hồ demo 2', price: 2000000, sale_price: 0, main_image: { image: 'bulova-accu-swiss-tellaro-automatic-watch-43mm4.jpg.webp', alt: 'sp2' }, brand: { _id: 'b2', name: 'Brand B' }, quantity: 5, views: 50 },
-  { _id: '3', name: 'Đồng hồ demo 3', price: 1500000, sale_price: 1200000, main_image: { image: 'bulova-murren-mechanical-hand-wind-automatic-watch-40mm1.jpg.webp', alt: 'sp3' }, brand: { _id: 'b3', name: 'Brand C' }, quantity: 8, views: 80 },
-  { _id: '4', name: 'Đồng hồ demo 4', price: 2500000, sale_price: 0, main_image: { image: 'breguet-tradition-dame-7038bb-1t-9v6-d00d-watch-37mm.jpg_980_980.webp', alt: 'sp4' }, brand: { _id: 'b4', name: 'Brand D' }, quantity: 3, views: 30 },
-  { _id: '5', name: 'Đồng hồ demo 5', price: 1800000, sale_price: 1500000, main_image: { image: 'bulova-accu-swiss-watch-31mm.jpg_980_980.webp', alt: 'sp5' }, brand: { _id: 'b1', name: 'Brand A' }, quantity: 7, views: 60 },
-  { _id: '6', name: 'Đồng hồ demo 6', price: 3000000, sale_price: 2700000, main_image: { image: 'bulova-accutron-masella-chronograph-black-watch-40mm.jpg_980_980.webp', alt: 'sp6' }, brand: { _id: 'b2', name: 'Brand B' }, quantity: 2, views: 20 }
+  { _id: '1', name: 'Đồng hồ demo 1', price: 1000000, sale_price: 900000, main_image: { image: 'breguet-classique-quantieme-perpetuel-7327bb-11-9vu-39mm.jpg.webp', alt: 'sp1' }, brand: { name: 'Brand A' }, quantity: 10, views: 100 },
+  { _id: '2', name: 'Đồng hồ demo 2', price: 2000000, sale_price: 0, main_image: { image: 'bulova-accu-swiss-tellaro-automatic-watch-43mm4.jpg.webp', alt: 'sp2' }, brand: { name: 'Brand B' }, quantity: 5, views: 50 },
+  { _id: '3', name: 'Đồng hồ demo 3', price: 1500000, sale_price: 1200000, main_image: { image: 'bulova-murren-mechanical-hand-wind-automatic-watch-40mm1.jpg.webp', alt: 'sp3' }, brand: { name: 'Brand C' }, quantity: 8, views: 80 },
+  { _id: '4', name: 'Đồng hồ demo 4', price: 2500000, sale_price: 0, main_image: { image: 'breguet-tradition-dame-7038bb-1t-9v6-d00d-watch-37mm.jpg_980_980.webp', alt: 'sp4' }, brand: { name: 'Brand D' }, quantity: 3, views: 30 },
+  { _id: '5', name: 'Đồng hồ demo 5', price: 1800000, sale_price: 1500000, main_image: { image: 'bulova-accu-swiss-watch-31mm.jpg_980_980.webp', alt: 'sp5' }, brand: { name: 'Brand A' }, quantity: 7, views: 60 },
+  { _id: '6', name: 'Đồng hồ demo 6', price: 3000000, sale_price: 2700000, main_image: { image: 'bulova-accutron-masella-chronograph-black-watch-40mm.jpg_980_980.webp', alt: 'sp6' }, brand: { name: 'Brand B' }, quantity: 2, views: 20 }
 ];
 
 export default function ProductNew() {
     const [products] = useState<IProduct[]>(mockProducts);
-    const [wishlistStatus, setWishlistStatus] = useState<{[key: string]: boolean}>({});
+    const [wishlistStatus] = useState<{[key: string]: boolean}>({});
 
     const containerRef = useRef<HTMLDivElement>(null);
 
