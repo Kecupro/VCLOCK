@@ -222,11 +222,15 @@ export default function ProductDetail() {
   if (!product) return <div>Đang tải sản phẩm...</div>;
 
   const handlePrev = () => {
-    setCurrentImg((prev) => (prev === 0 ? product.images.length - 1 : prev - 1));
+    const images = product?.images;
+    if (!images?.length) return;
+    setCurrentImg((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentImg((prev) => (prev === product.images.length - 1 ? 0 : prev + 1));
+    const images = product?.images;
+    if (!images?.length) return;
+    setCurrentImg((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
   return (
@@ -234,8 +238,8 @@ export default function ProductDetail() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
         <div className="relative">
           <Image
-            src={product.images[currentImg].image}
-            alt={product.images[currentImg].alt || product.name}
+            src={product.images?.[currentImg]?.image || ''}
+            alt={product.images?.[currentImg]?.alt || product.name}
             className="w-full h-116 object-cover rounded-xl cursor-zoom-in"
             width={800}
             height={464}
@@ -249,8 +253,8 @@ export default function ProductDetail() {
               onClick={() => setShowZoom(false)}
             >
               <Image
-                src={product.images[currentImg].image}
-                alt={product.images[currentImg].alt || product.name}
+                src={product.images?.[currentImg]?.image || ''}
+                alt={product.images?.[currentImg]?.alt || product.name}
                 className="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl cursor-zoom-out"
                 width={800}
                 height={464}
@@ -275,7 +279,7 @@ export default function ProductDetail() {
             <i className="fa-solid fa-chevron-right"></i>
           </button>
           <div className="grid grid-cols-4 gap-0.5 mt-4">
-            {product.images.map((img, idx) => (
+            {product.images?.map((img, idx) => (
               <div
                 key={idx}
                 className={`overflow-hidden rounded cursor-pointer flex items-center justify-center h-24 transition
