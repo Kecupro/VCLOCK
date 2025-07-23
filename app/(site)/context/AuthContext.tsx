@@ -45,7 +45,7 @@ const mockUser: IUser = {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<IUser | null>(mockUser);
+  const [user, setUser] = useState<IUser>(mockUser);
 
   const logout = () => {
     console.log("Logout disabled in demo mode.");
