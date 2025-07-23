@@ -28,43 +28,43 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  useEffect(() => {
-    const handleAuthStateChange = () => {
-      const token = localStorage.getItem('token');
-      const userData = localStorage.getItem('user');
-      if (token && userData) {
-        try {
-          const loadedUser = JSON.parse(userData);
-          setUser(loadedUser);
-          const isAdmin = ['1', '2'].includes(loadedUser.role);
-          const isTryingToAccessAdminArea = pathname.startsWith('/admin');
-          if (!isAdmin && isTryingToAccessAdminArea) {
-            router.push('/');
-          }
+  // useEffect(() => {
+  //   const handleAuthStateChange = () => {
+  //     const token = localStorage.getItem('token');
+  //     const userData = localStorage.getItem('user');
+  //     if (token && userData) {
+  //       try {
+  //         const loadedUser = JSON.parse(userData);
+  //         setUser(loadedUser);
+  //         const isAdmin = ['1', '2'].includes(loadedUser.role);
+  //         const isTryingToAccessAdminArea = pathname.startsWith('/admin');
+  //         if (!isAdmin && isTryingToAccessAdminArea) {
+  //           router.push('/');
+  //         }
 
 
-        } catch (e) {
-          console.error("Error parsing user data from localStorage:", e);
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          setUser(null);
-        }
-      } else {
-        if (pathname.startsWith('/admin')) {
-          router.push('/');
-        }
-        setUser(null);
-      }
-    };
-    handleAuthStateChange();
-    const storageEventListener = (event: StorageEvent) => {
-      if (event.key === 'token' || event.key === 'user' || event.key === null) {
-        handleAuthStateChange();
-      }
-    };
-    window.addEventListener('storage', storageEventListener);
-    return () => window.removeEventListener('storage', storageEventListener);
-  }, [router, pathname, setUser]);
+  //       } catch (e) {
+  //         console.error("Error parsing user data from localStorage:", e);
+  //         localStorage.removeItem('token');
+  //         localStorage.removeItem('user');
+  //         // setUser(null); // This would cause an error in demo mode
+  //       }
+  //     } else {
+  //       if (pathname.startsWith('/admin')) {
+  //         router.push('/');
+  //       }
+  //       // setUser(null); // This would cause an error in demo mode
+  //     }
+  //   };
+  //   handleAuthStateChange();
+  //   const storageEventListener = (event: StorageEvent) => {
+  //     if (event.key === 'token' || event.key === 'user' || event.key === null) {
+  //       handleAuthStateChange();
+  //     }
+  //   };
+  //   window.addEventListener('storage', storageEventListener);
+  //   return () => window.removeEventListener('storage', storageEventListener);
+  // }, [router, pathname, setUser]);
 
   useEffect(() => {
     const history = localStorage.getItem('searchHistory');

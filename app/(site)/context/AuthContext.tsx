@@ -3,8 +3,8 @@ import React, { createContext, useContext, useState } from "react";
 import { IUser } from "../cautrucdata";
 
 interface AuthContextType {
-  user: IUser | null;
-  setUser: (user: IUser | null) => void;
+  user: IUser;
+  setUser: React.Dispatch<React.SetStateAction<IUser>>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 }
