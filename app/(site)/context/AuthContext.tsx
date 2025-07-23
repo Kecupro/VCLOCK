@@ -1,7 +1,6 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { IUser, IAddress } from "../cautrucdata";
+import React, { createContext, useContext, useState } from "react";
+import { IUser } from "../cautrucdata";
 
 interface AuthContextType {
   user: IUser | null;
